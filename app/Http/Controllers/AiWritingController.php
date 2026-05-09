@@ -414,6 +414,8 @@ Target: sekitar {$wordCount} kata.
 
 Permintaan spesifik pengguna: {$prompt}
 
+PENTING: JANGAN PERNAH gunakan karakter em-dash (—) dalam output. Gunakan strip biasa (-) atau tanda baca lain jika diperlukan.
+
 Format output:
 - Gunakan format akademik standar
 - Sertakan referensi placeholder [Author, Year] untuk kutipan
@@ -431,7 +433,7 @@ PROMPT;
             'formalize' => 'Buat teks berikut lebih formal dan akademis.',
         ];
 
-        return $typeInstructions[$type] . "\n\nBahasa: {$language}\n\nTeks:\n{$text}";
+        return $typeInstructions[$type] . "\n\nBahasa: {$language}\n\nPENTING: JANGAN PERNAH gunakan karakter em-dash (—). Gunakan strip biasa (-) jika diperlukan.\n\nTeks:\n{$text}";
     }
 
     private function buildTypoCorrectionPrompt(string $text, string $language): string
@@ -439,6 +441,8 @@ PROMPT;
         return <<<PROMPT
 Analisis teks berikut untuk koreksi typo, kesalahan grammar, ejaan, dan tanda baca.
 Bahasa: {$language}
+
+PENTING: JANGAN PERNAH gunakan karakter em-dash (—) dalam output. Gunakan strip biasa (-) jika diperlukan.
 
 Teks:
 {$text}
@@ -467,6 +471,8 @@ Analisis teks berikut untuk potensi plagiarisme. Identifikasi:
 2. Bagian yang perlu dikutip/direferensikan
 3. Estimasi similarity score (0-100%)
 4. Rekomendasi parafrase untuk bagian bermasalah
+
+PENTING: JANGAN PERNAH gunakan karakter em-dash (—) dalam output. Gunakan strip biasa (-) jika diperlukan.
 
 Teks (potongan):
 {$text}
@@ -505,6 +511,8 @@ Tugas:
    - Mengapa penting untuk diteliti (significance)
    - Metode yang disarankan
 3. Prioritaskan gap berdasarkan feasibility dan novelty
+
+PENTING: JANGAN PERNAH gunakan karakter em-dash (—) dalam output. Gunakan strip biasa (-) jika diperlukan.
 
 Format output (JSON):
 {
@@ -550,7 +558,10 @@ PROMPT;
 
             if ($response->successful()) {
                 $data = $response->json();
-                return $data['choices'][0]['message']['content'] ?? '';
+                $content = $data['choices'][0]['message']['content'] ?? '';
+                
+                // Final safety check: remove any em-dashes just in case
+                return str_replace('—', '-', $content);
             }
 
             throw new \Exception('API request failed: ' . $response->body());
@@ -564,12 +575,12 @@ PROMPT;
     private function getMockResponse(string $prompt): string
     {
         // Simple mock responses for development/testing
+        // Post-processing mock response to remove em-dashes if any
+        $mock = "";
         if (str_contains($prompt, 'outline')) {
-            return "## Outline Bab II - Tinjauan Pustaka\n\n### 2.1 Landasan Teori\n#### 2.1.1 Konsep Dasar [Topik Utama]\n- Definisi dan terminologi\n- Sejarah perkembangan\n- Variabel dan indikator\n\n#### 2.1.2 Kerangka Konseptual\n- Hubungan antar variabel\n- Hipotesis penelitian\n\n### 2.2 Penelitian Terdahulu\n#### 2.2.1 Studi Internasional\n- [Penelitian 1: Author, Year] - Temuan utama\n- [Penelitian 2: Author, Year] - Metodologi\n\n#### 2.2.2 Studi Lokal (Indonesia)\n- [Penelitian 3: Author, Year] - Konteks Indonesia\n\n### 2.3 Kerangka Pemikiran\n- Sintesis teori\n- Model konseptual penelitian ini\n\n---\n\n*Catatan: Outline ini dapat dikembangkan lebih detail berdasarkan fokus penelitian spesifik Anda.*";
-        }
-
-        if (str_contains($prompt, 'plagiarisme') || str_contains($prompt, 'similarity')) {
-            return json_encode([
+            $mock = "## Outline Bab II - Tinjauan Pustaka\n\n### 2.1 Landasan Teori\n#### 2.1.1 Konsep Dasar [Topik Utama]\n- Definisi dan terminologi\n- Sejarah perkembangan\n- Variabel dan indikator\n\n#### 2.1.2 Kerangka Konseptual\n- Hubungan antar variabel\n- Hipotesis penelitian\n\n### 2.2 Penelitian Terdahulu\n#### 2.2.1 Studi Internasional\n- [Penelitian 1: Author, Year] - Temuan utama\n- [Penelitian 2: Author, Year] - Metodologi\n\n#### 2.2.2 Studi Lokal (Indonesia)\n- [Penelitian 3: Author, Year] - Konteks Indonesia\n\n### 2.3 Kerangka Pemikiran\n- Sintesis teori\n- Model konseptual penelitian ini\n\n---\n\n*Catatan: Outline ini dapat dikembangkan lebih detail berdasarkan fokus penelitian spesifik Anda.*";
+        } else if (str_contains($prompt, 'plagiarisme') || str_contains($prompt, 'similarity')) {
+            $mock = json_encode([
                 'similarity_score' => 8.5,
                 'matches' => [
                     [
@@ -589,10 +600,8 @@ PROMPT;
                     'Tambahkan analisis kritis setelah kutipan',
                 ],
             ]);
-        }
-
-        if (str_contains($prompt, 'typo') || str_contains($prompt, 'correction')) {
-            return json_encode([
+        } else if (str_contains($prompt, 'typo') || str_contains($prompt, 'correction')) {
+            $mock = json_encode([
                 'corrected_text' => 'Teks ini sudah dikoreksi dengan baik.',
                 'corrections' => [
                     [
@@ -604,10 +613,8 @@ PROMPT;
                 ],
                 'summary' => '1 koreksi ditemukan dan diperbaiki.',
             ]);
-        }
-
-        if (str_contains($prompt, 'gap') || str_contains($prompt, 'research gap')) {
-            return json_encode([
+        } else if (str_contains($prompt, 'gap') || str_contains($prompt, 'research gap')) {
+            $mock = json_encode([
                 'gaps' => [
                     [
                         'title' => 'Kurangnya Studi Empiris di Konteks Indonesia',
@@ -628,9 +635,11 @@ PROMPT;
                 ],
                 'recommendation' => 'Gap 1 (Konteks Indonesia) paling direkomendasikan karena feasibility tinggi dan novelty yang kuat untuk kontribusi lokal.',
             ]);
+        } else {
+            $mock = "Konten berhasil digenerate berdasarkan permintaan Anda. [Ini adalah mock response untuk development. Integration dengan Swiftrouter API akan memberikan hasil yang lebih berkualitas.]";
         }
 
-        return "Konten berhasil digenerate berdasarkan permintaan Anda. [Ini adalah mock response untuk development. Integration dengan Swiftrouter API akan memberikan hasil yang lebih berkualitas.]";
+        return str_replace('—', '-', $mock);
     }
 
     private function parseCorrections(string $original, string $aiResponse): array
@@ -641,7 +650,7 @@ PROMPT;
                 return $data;
             }
         } catch (\Exception $e) {
-            // Fallback: return simple correction structure
+            // Fallback
         }
 
         return [
