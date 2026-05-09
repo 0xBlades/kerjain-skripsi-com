@@ -2,6 +2,13 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    <!-- Google Auth Error -->
+    @if ($errors->has('google'))
+        <div class="mb-4 p-4 text-sm text-red-800 bg-red-50 dark:bg-red-900/20 dark:text-red-300 rounded-lg">
+            {{ $errors->first('google') }}
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 

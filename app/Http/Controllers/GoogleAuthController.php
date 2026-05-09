@@ -25,15 +25,16 @@ class GoogleAuthController extends Controller
                     'name' => $googleUser->name,
                     'email' => $googleUser->email,
                     'avatar' => $googleUser->avatar,
+                    'email_verified_at' => now(),
                 ]
             );
 
-            Auth::login($user);
+            Auth::login($user, true);
 
             return redirect()->route('dashboard');
         } catch (\Exception $e) {
             return redirect()->route('login')->withErrors([
-                'google' => 'Gagal login dengan Google. Silakan coba lagi.',
+                'google' => 'Gagal login dengan Google: ' . $e->getMessage(),
             ]);
         }
     }
