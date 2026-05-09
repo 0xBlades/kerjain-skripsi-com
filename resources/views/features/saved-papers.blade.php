@@ -23,9 +23,15 @@
             @else
                 <div class="space-y-4">
                     @foreach($papers as $paper)
-                    <div class="feature-surface p-5 flex gap-4">
+                    <div class="feature-surface p-5 flex gap-4 hover:border-sky-500/30 transition-colors group">
                         <div class="flex-1 min-w-0">
+                            @if($paper->url)
+                            <a href="{{ $paper->url }}" target="_blank" class="block group">
+                                <h3 class="text-base font-semibold text-slate-900 dark:text-white leading-snug mb-1 group-hover:text-sky-500 transition-colors">{{ $paper->title }}</h3>
+                            </a>
+                            @else
                             <h3 class="text-base font-semibold text-slate-900 dark:text-white leading-snug mb-1">{{ $paper->title }}</h3>
+                            @endif
                             <p class="text-sm text-slate-500 dark:text-slate-400 mb-2">{{ $paper->authors ?? 'Unknown authors' }}</p>
                             <div class="flex flex-wrap items-center gap-3 text-xs text-slate-400 dark:text-[#666]">
                                 @if($paper->published_at)
@@ -43,7 +49,7 @@
                             @endif
                         </div>
                         <div class="flex flex-col items-end gap-2 shrink-0">
-                            <button onclick="removePaper({{ $paper->id }})" class="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition" title="Hapus dari tersimpan">
+                            <button onclick="removePaper('{{ $paper->external_id }}')" class="p-2 rounded-lg text-sky-500 hover:bg-sky-50 dark:hover:bg-sky-500/10 transition" title="Hapus dari tersimpan">
                                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
                             </button>
                             @if($paper->url)
