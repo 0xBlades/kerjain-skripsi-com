@@ -49,10 +49,10 @@
             <div class="border-t border-neutral-200 dark:border-neutral-800"></div>
 
             <!-- Sections -->
-            <div class="divide-y divide-neutral-200 dark:divide-neutral-800">
+            <div class="divide-y divide-neutral-100 dark:divide-neutral-800/60">
 
                 <!-- Personal Info Section -->
-                <div class="grid grid-cols-1 gap-x-16 gap-y-6 py-10 md:grid-cols-3">
+                <div class="grid grid-cols-1 gap-x-16 gap-y-8 py-12 md:grid-cols-3">
                     <div>
                         <h2 class="text-sm font-semibold text-neutral-900 dark:text-white">Personal Information</h2>
                         <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Update your name and email address.</p>
@@ -93,7 +93,7 @@
                 </div>
 
                 <!-- Password Section -->
-                <div class="grid grid-cols-1 gap-x-16 gap-y-6 py-10 md:grid-cols-3">
+                <div class="grid grid-cols-1 gap-x-16 gap-y-8 py-12 md:grid-cols-3">
                     <div>
                         <h2 class="text-sm font-semibold text-neutral-900 dark:text-white">Password</h2>
                         <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Update your password to keep your account secure.</p>
@@ -137,21 +137,21 @@
                 </div>
 
                 <!-- Delete Account Section -->
-                <div class="grid grid-cols-1 gap-x-16 gap-y-6 py-10 md:grid-cols-3">
+                <div class="grid grid-cols-1 gap-x-16 gap-y-8 py-12 md:grid-cols-3">
                     <div>
                         <h2 class="text-sm font-semibold text-red-600 dark:text-red-400">Delete Account</h2>
                         <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Permanently remove your account and all associated data.</p>
                     </div>
                     <div class="md:col-span-2">
-                        <div class="rounded-lg border border-red-200 bg-red-50 p-5 dark:border-red-900/50 dark:bg-red-950/20">
-                            <p class="text-sm text-red-700 dark:text-red-300 leading-relaxed">
+                        <div class="rounded-lg border border-red-900/40 bg-red-950/30 p-5">
+                            <p class="text-sm text-red-400 leading-relaxed">
                                 Once your account is deleted, all of its resources and data will be permanently removed. This action cannot be undone.
                             </p>
                             <div class="mt-4">
                                 <button
                                     x-data=""
                                     x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-                                    class="rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50 dark:border-red-800 dark:bg-transparent dark:text-red-400 dark:hover:bg-red-950/40">
+                                    class="rounded-lg border border-red-800 bg-transparent px-4 py-2 text-sm font-medium text-red-400 transition hover:bg-red-950/50">
                                     Delete account
                                 </button>
                             </div>
