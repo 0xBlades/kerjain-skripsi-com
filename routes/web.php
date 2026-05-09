@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PaperSearchController;
 use App\Http\Controllers\AiWritingController;
 use App\Http\Controllers\ThesisController;
+use App\Http\Controllers\GoogleAuthController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -51,5 +52,8 @@ Route::middleware('auth')->group(function () {
     
     // No document management routes — this app does not store any files or thesis data
 });
+
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
 
 require __DIR__.'/auth.php';

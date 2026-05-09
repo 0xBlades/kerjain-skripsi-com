@@ -41,4 +41,10 @@ return [
         'model' => env('SWIFTROUTER_MODEL', 'gemini-3.1-flash-lite-preview'),
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI', '/auth/google/callback'),
+    ],
+
 ];
