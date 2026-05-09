@@ -159,7 +159,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="{{ $f['icon'] }}" />
                         </svg>
                     </div>
-                    <p class="text-xs uppercase tracking-wider text-slate-400 dark:text-[#555] mb-1.5">{{ $f['label'] }}</p>
+                    <p class="text-xs uppercase tracking-wider text-slate-400 dark:text-neutral-500 mb-1.5">{{ $f['label'] }}</p>
                     <h3 class="font-semibold text-slate-900 dark:text-[#ededed] mb-2">{{ $f['title'] }}</h3>
                     <p class="text-sm text-slate-500 dark:text-[#888] leading-relaxed">{{ $f['desc'] }}</p>
                 </div>
@@ -172,7 +172,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white dark:bg-[#111111] dark:border-[#2a2a2a] overflow-hidden">
                 <div class="grid lg:grid-cols-2">
                     <div class="p-10 lg:p-12 border-b lg:border-b-0 lg:border-r border-slate-100 dark:border-[#2a2a2a]">
-                        <p class="text-xs uppercase tracking-[0.4em] text-slate-400 dark:text-[#555] mb-4">Cara Kerja</p>
+                        <p class="text-xs uppercase tracking-[0.4em] text-slate-400 dark:text-neutral-500 mb-4">Cara Kerja</p>
                         <h2 class="text-2xl font-bold text-slate-900 dark:text-[#ededed] mb-8">Tiga langkah dari topik ke submit</h2>
                         <ol class="space-y-6">
                             @foreach([
@@ -181,7 +181,7 @@
                                 ['03', 'Export & submit', 'Simpan semua draft dan dokumen, pantau progress, siap untuk bimbingan.'],
                             ] as [$num, $title, $desc])
                             <li class="flex gap-4">
-                                <span class="text-xs font-mono font-bold text-slate-300 dark:text-[#444] pt-0.5 shrink-0">{{ $num }}</span>
+                                <span class="text-xs font-mono font-bold text-slate-300 dark:text-neutral-600 pt-0.5 shrink-0">{{ $num }}</span>
                                 <div>
                                     <p class="font-semibold text-slate-900 dark:text-[#ededed] mb-1">{{ $title }}</p>
                                     <p class="text-sm text-slate-500 dark:text-[#888]">{{ $desc }}</p>
@@ -191,7 +191,7 @@
                         </ol>
                     </div>
                     <div class="p-10 lg:p-12 flex flex-col gap-5">
-                        <p class="text-xs uppercase tracking-[0.4em] text-slate-400 dark:text-[#555] mb-2">Kenapa Thesis Assistant?</p>
+                        <p class="text-xs uppercase tracking-[0.4em] text-slate-400 dark:text-neutral-500 mb-2">Kenapa Thesis Assistant?</p>
                         @foreach([
                             ['AI', 'AI dengan konteks skripsi', 'Setiap prompt memahami judul, bidang, dan rumusan masalah yang sudah kamu isi.'],
                             ['ID', 'Dirancang untuk Indonesia', 'Support Bahasa Indonesia, format APA/IEEE, dan standar kampus lokal.'],
@@ -213,12 +213,12 @@
 
         <!-- CTA -->
         <section class="max-w-6xl mx-auto px-6 py-16">
-            <div class="rounded-2xl bg-sky-500 dark:bg-white px-8 py-14 text-center relative overflow-hidden">
-                <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px); background-size: 30px 30px;"></div>
+            <div class="rounded-2xl bg-sky-500 dark:bg-[#0d0d0d] dark:border dark:border-neutral-800/60 px-8 py-14 text-center relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10 dark:opacity-[0.03]" style="background-image: linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px); background-size: 30px 30px;"></div>
                 <div class="relative">
-                    <h2 class="text-3xl font-bold text-white dark:text-black mb-3">Mulai sekarang, gratis.</h2>
-                    <p class="text-sky-100 dark:text-[#555] mb-8 max-w-md mx-auto">Buat akun dan langsung akses semua fitur AI tanpa biaya apapun.</p>
-                    <a href="{{ route('register') }}" class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white dark:bg-black text-sky-600 dark:text-white font-semibold hover:bg-sky-50 dark:hover:bg-[#111] transition shadow-lg">
+                    <h2 class="text-3xl font-bold text-white mb-3">Mulai sekarang, gratis.</h2>
+                    <p class="text-sky-100 dark:text-neutral-400 mb-8 max-w-md mx-auto">Buat akun dan langsung akses semua fitur AI tanpa biaya apapun.</p>
+                    <a href="{{ route('register') }}" class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white text-sky-600 dark:bg-white dark:text-black font-semibold hover:bg-sky-50 dark:hover:bg-neutral-200 transition shadow-lg">
                         Buat Akun Gratis
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                     </a>
@@ -228,7 +228,7 @@
 
         <!-- Footer -->
         <footer class="border-t border-slate-100 dark:border-[#2a2a2a]">
-            <div class="max-w-6xl mx-auto px-6 py-8 flex flex-wrap items-center justify-between gap-4 text-sm text-slate-400 dark:text-[#555]">
+            <div class="max-w-6xl mx-auto px-6 py-8 flex flex-wrap items-center justify-between gap-4 text-sm text-slate-400 dark:text-neutral-500">
                 <div class="flex items-center gap-2">
                     <div class="h-6 w-6 rounded bg-sky-500 flex items-center justify-center text-white text-xs font-bold">TA</div>
                     <span>&copy; {{ date('Y') }} Thesis Assistant</span>
