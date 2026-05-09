@@ -12,7 +12,7 @@
             </div>
 
             <!-- Profile Header -->
-            <div class="mb-10 flex flex-col sm:flex-row sm:items-center gap-6">
+            <div class="mb-12 flex flex-col sm:flex-row sm:items-center gap-6">
                 <div class="relative flex-shrink-0">
                     @if ($user->avatar)
                         <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="w-20 h-20 rounded-full object-cover border-2 border-neutral-200 dark:border-neutral-800">
@@ -46,7 +46,7 @@
             </div>
 
             <!-- Divider -->
-            <div class="border-t border-neutral-200 dark:border-neutral-800"></div>
+            <div class="border-t border-neutral-200 dark:border-neutral-800 mb-2"></div>
 
             <!-- Sections -->
             <div class="divide-y divide-neutral-100 dark:divide-neutral-800/60">
@@ -58,7 +58,7 @@
                         <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Update your name and email address.</p>
                     </div>
                     <div class="md:col-span-2">
-                        <form method="post" action="{{ route('profile.update') }}" class="space-y-5">
+                        <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
                             @csrf
                             @method('patch')
 
@@ -99,7 +99,7 @@
                         <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Update your password to keep your account secure.</p>
                     </div>
                     <div class="md:col-span-2">
-                        <form method="post" action="{{ route('password.update') }}" class="space-y-5">
+                        <form method="post" action="{{ route('password.update') }}" class="space-y-6">
                             @csrf
                             @method('put')
 
