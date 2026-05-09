@@ -146,17 +146,37 @@
                     </div>
 
                     <!-- Output -->
-                    <div id="writingOutput" class="hidden">
-                        <div class="flex items-center justify-between mb-3">
-                            <h3 class="font-semibold text-slate-900 dark:text-white">Hasil Generate</h3>
+                    <div id="writingOutput" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div class="flex items-center justify-between mb-4 border-b border-slate-100 dark:border-slate-800 pb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="h-8 w-8 rounded-lg bg-sky-500 flex items-center justify-center text-white shadow-lg shadow-sky-200 dark:shadow-none">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                </div>
+                                <h3 class="font-semibold text-slate-900 dark:text-white">Hasil Draft Akademik</h3>
+                            </div>
                             <div class="flex items-center gap-2">
-                                <span id="wordCountInfo" class="text-xs text-slate-500 dark:text-slate-400"></span>
-                                <button onclick="copyOutput('writing')" class="text-sky-500 hover:text-sky-600 text-sm">
+                                <span id="wordCountInfo" class="text-[10px] uppercase tracking-wider font-bold text-slate-400 bg-slate-50 dark:bg-white/5 px-2 py-1 rounded-md"></span>
+                                <div class="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1"></div>
+                                <button onclick="copyOutput('writing')" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-sky-500 transition-colors dark:text-slate-400 dark:hover:text-sky-400">
+                                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
                                     Copy
+                                </button>
+                                <button onclick="downloadAsTxt()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-sky-500 transition-colors dark:text-slate-400 dark:hover:text-sky-400">
+                                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                    Download
                                 </button>
                             </div>
                         </div>
-                        <div id="writingResult" class="feature-muted p-5 prose prose-slate max-w-none dark:prose-invert whitespace-pre-wrap"></div>
+                        <div class="relative group">
+                            <div class="absolute -inset-0.5 bg-gradient-to-r from-sky-500/20 to-indigo-500/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                            <div class="relative bg-white dark:bg-[#0d0d0d] border border-slate-100 dark:border-neutral-800/60 rounded-2xl p-8 shadow-sm">
+                                <div id="writingResult" class="prose prose-slate max-w-none dark:prose-invert prose-headings:font-display prose-headings:font-bold prose-p:leading-relaxed prose-p:text-slate-600 dark:prose-p:text-neutral-400 prose-a:text-sky-500">
+                                    <!-- Markdown content will be rendered here -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -305,6 +325,7 @@
     </div>
 
     @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         // Tab switching
         function switchTab(tab) {
@@ -362,8 +383,16 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    document.getElementById('writingResult').textContent = data.data.content;
-                    document.getElementById('wordCountInfo').textContent = `~${data.data.word_count_estimate} kata`;
+                    const resultContainer = document.getElementById('writingResult');
+                    const rawContent = data.data.content;
+                    
+                    // Store raw content for copying
+                    resultContainer.dataset.raw = rawContent;
+                    
+                    // Render Markdown
+                    resultContainer.innerHTML = marked.parse(rawContent);
+                    
+                    document.getElementById('wordCountInfo').textContent = `${data.data.word_count_estimate} KATA`;
                     document.getElementById('writingOutput').classList.remove('hidden');
                 } else {
                     alert(data.message || 'Gagal generate konten.');
@@ -408,8 +437,16 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    document.getElementById('writingResult').textContent = data.data.improved_text;
-                    document.getElementById('wordCountInfo').textContent = 'Diperbaiki';
+                    const resultContainer = document.getElementById('writingResult');
+                    const rawContent = data.data.improved_text;
+                    
+                    // Store raw content for copying
+                    resultContainer.dataset.raw = rawContent;
+                    
+                    // Render Markdown
+                    resultContainer.innerHTML = marked.parse(rawContent);
+                    
+                    document.getElementById('wordCountInfo').textContent = 'DIPERBAIKI';
                     document.getElementById('writingOutput').classList.remove('hidden');
                 } else {
                     alert(data.message || 'Gagal memperbaiki teks.');
@@ -570,10 +607,27 @@
 
         // Utilities
         function copyOutput(type) {
-            const text = document.getElementById(type + 'Result').textContent;
+            const container = document.getElementById(type + 'Result');
+            const text = container.dataset.raw || container.textContent;
             navigator.clipboard.writeText(text).then(() => {
-                alert('Teks berhasil disalin!');
+                const toast = document.createElement('div');
+                toast.className = 'fixed bottom-4 right-4 bg-slate-900 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-2xl animate-in slide-in-from-bottom-2 z-50';
+                toast.textContent = 'Teks berhasil disalin!';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 2000);
             });
+        }
+
+        function downloadAsTxt() {
+            const container = document.getElementById('writingResult');
+            const text = container.dataset.raw || container.textContent;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'draft-skripsi.txt';
+            a.click();
+            window.URL.revokeObjectURL(url);
         }
     </script>
     @endpush
