@@ -1,5 +1,5 @@
 <x-app-layout>
-    <x-slot name="header" />
+    <x-slot name="header"></x-slot>
 
     <div class="min-h-screen bg-white dark:bg-[#0a0a0a]">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
