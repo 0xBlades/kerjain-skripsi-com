@@ -92,50 +92,6 @@
                     </div>
                 </div>
 
-                <!-- Password Section -->
-                <div class="grid grid-cols-1 gap-x-16 gap-y-8 py-12 md:grid-cols-3">
-                    <div>
-                        <h2 class="text-sm font-semibold text-neutral-900 dark:text-white">Password</h2>
-                        <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Update your password to keep your account secure.</p>
-                    </div>
-                    <div class="md:col-span-2">
-                        <form method="post" action="{{ route('password.update') }}" class="space-y-6">
-                            @csrf
-                            @method('put')
-
-                            <div>
-                                <label for="update_password_current_password" class="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1.5">Current Password</label>
-                                <input id="update_password_current_password" name="current_password" type="password" autocomplete="current-password"
-                                    class="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2.5 text-sm text-neutral-900 placeholder-neutral-400 transition focus:border-neutral-400 focus:bg-white focus:outline-none focus:ring-0 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:placeholder-neutral-500 dark:focus:border-neutral-500">
-                                @if ($errors->updatePassword->has('current_password'))<p class="mt-1.5 text-xs text-red-500">{{ $errors->updatePassword->first('current_password') }}</p>@endif
-                            </div>
-
-                            <div>
-                                <label for="update_password_password" class="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1.5">New Password</label>
-                                <input id="update_password_password" name="password" type="password" autocomplete="new-password"
-                                    class="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2.5 text-sm text-neutral-900 placeholder-neutral-400 transition focus:border-neutral-400 focus:bg-white focus:outline-none focus:ring-0 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:placeholder-neutral-500 dark:focus:border-neutral-500">
-                                @if ($errors->updatePassword->has('password'))<p class="mt-1.5 text-xs text-red-500">{{ $errors->updatePassword->first('password') }}</p>@endif
-                            </div>
-
-                            <div>
-                                <label for="update_password_password_confirmation" class="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1.5">Confirm New Password</label>
-                                <input id="update_password_password_confirmation" name="password_confirmation" type="password" autocomplete="new-password"
-                                    class="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2.5 text-sm text-neutral-900 placeholder-neutral-400 transition focus:border-neutral-400 focus:bg-white focus:outline-none focus:ring-0 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:placeholder-neutral-500 dark:focus:border-neutral-500">
-                                @if ($errors->updatePassword->has('password_confirmation'))<p class="mt-1.5 text-xs text-red-500">{{ $errors->updatePassword->first('password_confirmation') }}</p>@endif
-                            </div>
-
-                            <div class="flex items-center gap-4 pt-1">
-                                <button type="submit" class="rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-neutral-700 dark:bg-white dark:text-black dark:hover:bg-neutral-200">
-                                    Update password
-                                </button>
-                                @if (session('status') === 'password-updated')
-                                    <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="text-xs text-neutral-500 dark:text-neutral-400">Saved.</p>
-                                @endif
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
                 <!-- Delete Account Section -->
                 <div class="grid grid-cols-1 gap-x-16 gap-y-8 py-12 md:grid-cols-3">
                     <div>
@@ -162,12 +118,21 @@
                                 @csrf
                                 @method('delete')
                                 <h2 class="text-lg font-semibold text-neutral-900 dark:text-white">Are you sure?</h2>
-                                <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">This action is irreversible. Enter your password to confirm.</p>
-                                <div class="mt-5">
-                                    <input id="password" name="password" type="password" placeholder="Your password"
-                                        class="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2.5 text-sm focus:outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-white">
-                                    @if ($errors->userDeletion->has('password'))<p class="mt-1.5 text-xs text-red-500">{{ $errors->userDeletion->first('password') }}</p>@endif
-                                </div>
+                                <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+                                    This action is irreversible. All your data will be permanently removed.
+                                    @if($user->password)
+                                        Please enter your password to confirm.
+                                    @endif
+                                </p>
+
+                                @if($user->password)
+                                    <div class="mt-5">
+                                        <input id="password" name="password" type="password" placeholder="Your password"
+                                            class="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2.5 text-sm focus:outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-white">
+                                        @if ($errors->userDeletion->has('password'))<p class="mt-1.5 text-xs text-red-500">{{ $errors->userDeletion->first('password') }}</p>@endif
+                                    </div>
+                                @endif
+
                                 <div class="mt-6 flex justify-end gap-3">
                                     <button type="button" x-on:click="$dispatch('close')" class="rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700">Cancel</button>
                                     <button type="submit" class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700">Delete account</button>
