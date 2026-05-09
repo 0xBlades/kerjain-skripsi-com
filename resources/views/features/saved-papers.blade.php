@@ -23,10 +23,13 @@
             @else
                 <div class="space-y-4">
                     @foreach($papers as $paper)
+                    @php
+                        $paperUrl = $paper->url ?: ($paper->external_id ? "https://www.semanticscholar.org/paper/{$paper->external_id}" : null);
+                    @endphp
                     <div class="feature-surface p-5 flex gap-4 hover:border-sky-500/30 transition-colors group">
                         <div class="flex-1 min-w-0">
-                            @if($paper->url)
-                            <a href="{{ $paper->url }}" target="_blank" class="block group">
+                            @if($paperUrl)
+                            <a href="{{ $paperUrl }}" target="_blank" class="block group">
                                 <h3 class="text-base font-semibold text-slate-900 dark:text-white leading-snug mb-1 group-hover:text-sky-500 transition-colors">{{ $paper->title }}</h3>
                             </a>
                             @else
@@ -52,8 +55,8 @@
                             <button onclick="removePaper('{{ $paper->external_id }}')" class="p-2 rounded-lg text-sky-500 hover:bg-sky-50 dark:hover:bg-sky-500/10 transition" title="Hapus dari tersimpan">
                                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
                             </button>
-                            @if($paper->url)
-                            <a href="{{ $paper->url }}" target="_blank" class="p-2 rounded-lg text-slate-400 hover:text-sky-500 hover:bg-sky-50 dark:hover:bg-sky-500/10 transition" title="Buka paper">
+                            @if($paperUrl)
+                            <a href="{{ $paperUrl }}" target="_blank" class="p-2 rounded-lg text-slate-400 hover:text-sky-500 hover:bg-sky-50 dark:hover:bg-sky-500/10 transition" title="Buka paper">
                                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                             </a>
                             @endif

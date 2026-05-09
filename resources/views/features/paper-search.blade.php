@@ -341,14 +341,18 @@
                     const year = paper.year || 'N/A';
                     const venue = paper.venue || '';
                     const citations = paper.citationCount || 0;
-                    const hasPdf = paper.openAccessPdf ? true : false;
+                    const pdfUrl = paper.openAccessPdf ? paper.openAccessPdf.url : null;
+                    const paperUrl = paper.url || pdfUrl;
+                    const hasPdf = !!pdfUrl;
                     
                     const card = document.createElement('div');
                     card.className = 'feature-surface p-5 hover:-translate-y-1 transition-transform';
                     card.innerHTML = `
                         <div class="flex items-start justify-between gap-4">
                             <div class="flex-1 min-w-0">
-                                <h4 class="font-semibold text-slate-900 text-lg leading-tight mb-2">${paper.title}</h4>
+                                <h4 class="font-semibold text-slate-900 text-lg leading-tight mb-2">
+                                    ${paperUrl ? `<a href="${paperUrl}" target="_blank" class="hover:text-sky-500 transition-colors">${paper.title}</a>` : paper.title}
+                                </h4>
                                 <p class="text-sm text-slate-600 mb-1">
                                     <span class="font-medium">${authors}</span>
                                     <span class="text-slate-400"> · ${year}</span>
@@ -373,7 +377,7 @@
                                 </div>
                             </div>
                             <div class="flex flex-col gap-2">
-                                <button onclick="toggleSavePaper('${paper.paperId}', '${escapeHtml(paper.title)}', '${escapeHtml(authors)}', ${year}, '${escapeHtml(paper.abstract || '')}', '${escapeHtml(venue)}', ${citations})" 
+                                <button onclick="toggleSavePaper('${paper.paperId}', '${escapeHtml(paper.title)}', '${escapeHtml(authors)}', ${year}, '${escapeHtml(paper.abstract || '')}', '${escapeHtml(venue)}', ${citations}, '${paperUrl || ''}')" 
                                     class="save-btn inline-flex items-center gap-1.5 rounded-lg bg-sky-50 px-3 py-2 text-sm font-medium text-sky-600 hover:bg-sky-100 transition-colors" data-paper-id="${paper.paperId}">
                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
@@ -407,7 +411,7 @@
             document.getElementById('searchResults').classList.remove('hidden');
         }
 
-        async function toggleSavePaper(paperId, title, authors, year, abstract, venue, citations) {
+        async function toggleSavePaper(paperId, title, authors, year, abstract, venue, citations, url) {
             try {
                 const response = await fetch('{{ route("paper.toggle-save") }}', {
                     method: 'POST',
@@ -422,7 +426,8 @@
                         year: year !== 'N/A' ? parseInt(year) : null,
                         abstract: abstract || null,
                         venue: venue || null,
-                        citation_count: citations
+                        citation_count: citations,
+                        url: url || null
                     })
                 });
                 
