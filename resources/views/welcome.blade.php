@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ config('app.name', 'Thesis Assistant') }} - AI Research Studio</title>
+        <title>{{ config('app.name', 'Kerjain Skripsi') }} - AI Research Studio</title>
         <script>
             if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
@@ -32,8 +32,8 @@
         <header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl dark:bg-[#000]/80 dark:border-[#2a2a2a]">
             <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
-                    <div class="h-8 w-8 rounded-lg bg-sky-500 flex items-center justify-center text-white font-bold text-sm">TA</div>
-                    <span class="font-semibold text-slate-900 dark:text-[#ededed]">Thesis Assistant</span>
+                    <div class="h-8 w-8 rounded-lg bg-sky-500 flex items-center justify-center text-white font-bold text-sm">KS</div>
+                    <span class="font-semibold text-slate-900 dark:text-[#ededed]">Kerjain Skripsi</span>
                 </div>
                 <div class="flex items-center gap-3 text-sm font-medium">
                     <button onclick="toggleLandingTheme()" class="h-8 w-8 flex items-center justify-center rounded-full border border-slate-200 text-slate-500 hover:text-slate-900 transition dark:border-[#2a2a2a] dark:text-[#888] dark:hover:text-[#ededed]">
@@ -97,7 +97,7 @@
                     <div class="h-3 w-3 rounded-full bg-yellow-400"></div>
                     <div class="h-3 w-3 rounded-full bg-green-400"></div>
                     <div class="ml-3 flex-1 bg-white dark:bg-[#1a1a1a] rounded-md px-3 py-1 text-xs text-slate-400 dark:text-[#555] border border-slate-200 dark:border-[#2a2a2a] max-w-xs">
-                        thesis-assistant.app/dashboard
+                        kerjainskripsi.com/dashboard
                     </div>
                 </div>
                 <!-- Mock dashboard content -->
@@ -191,7 +191,7 @@
                         </ol>
                     </div>
                     <div class="p-10 lg:p-12 flex flex-col gap-5">
-                        <p class="text-xs uppercase tracking-[0.4em] text-slate-400 dark:text-neutral-500 mb-2">Kenapa Thesis Assistant?</p>
+                        <p class="text-xs uppercase tracking-[0.4em] text-slate-400 dark:text-neutral-500 mb-2">Kenapa Kerjain Skripsi?</p>
                         @foreach([
                             ['AI', 'AI dengan konteks skripsi', 'Setiap prompt memahami judul, bidang, dan rumusan masalah yang sudah kamu isi.'],
                             ['ID', 'Dirancang untuk Indonesia', 'Support Bahasa Indonesia, format APA/IEEE, dan standar kampus lokal.'],
@@ -230,8 +230,8 @@
         <footer class="border-t border-slate-100 dark:border-[#2a2a2a]">
             <div class="max-w-6xl mx-auto px-6 py-8 flex flex-wrap items-center justify-between gap-4 text-sm text-slate-400 dark:text-neutral-500">
                 <div class="flex items-center gap-2">
-                    <div class="h-6 w-6 rounded bg-sky-500 flex items-center justify-center text-white text-xs font-bold">TA</div>
-                    <span>&copy; {{ date('Y') }} Thesis Assistant</span>
+                    <div class="h-6 w-6 rounded bg-sky-500 flex items-center justify-center text-white text-xs font-bold">KS</div>
+                    <span>&copy; {{ date('Y') }} Kerjain Skripsi</span>
                 </div>
                 <div class="flex gap-6">
                     <span class="hover:text-slate-600 dark:hover:text-[#888] cursor-pointer transition">Tentang</span>
