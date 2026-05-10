@@ -93,7 +93,7 @@
                 </div>
             </section>
 
-            <section class="grid lg:grid-cols-3 gap-6">
+            <section>
                 <div class="feature-surface p-6">
                     <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Interaksi AI Terbaru</h3>
                     <div class="mt-4 space-y-3">
@@ -105,33 +105,6 @@
                         @empty
                             <p class="text-sm text-slate-500 dark:text-slate-400">Belum ada interaksi AI.</p>
                         @endforelse
-                    </div>
-                </div>
-
-                <div class="feature-surface p-6">
-                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Dokumen Terbaru</h3>
-                    <div class="mt-4 space-y-3">
-                        @forelse ($documents as $document)
-                            <div class="rounded-xl bg-sky-50 p-3 dark:bg-sky-950/40">
-                                <p class="text-sm font-medium text-slate-900 dark:text-white">{{ $document->title }}</p>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">{{ $document->created_at->diffForHumans() }}</p>
-                            </div>
-                        @empty
-                            <p class="text-sm text-slate-500 dark:text-slate-400">Belum ada dokumen.</p>
-                        @endforelse
-                    </div>
-                </div>
-
-                <div class="feature-surface p-6">
-                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Fokus Riset</h3>
-                    <div class="mt-4 space-y-3">
-                        @foreach ($researchFocus as $focus)
-                            <div>
-                                <p class="text-sm font-semibold text-slate-900 dark:text-white">{{ $focus['title'] }}</p>
-                                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{{ $focus['insight'] }}</p>
-                                <p class="mt-1 text-xs text-sky-600">{{ $focus['next'] }}</p>
-                            </div>
-                        @endforeach
                     </div>
                 </div>
             </section>

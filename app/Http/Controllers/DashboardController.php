@@ -29,8 +29,6 @@ class DashboardController extends Controller
         }
 
         $recentInteractions = $user->aiInteractions()->latest()->take(4)->get();
-        $documents = $user->documents()->latest()->take(3)->get();
-        $plagiarismChecks = $user->plagiarismChecks()->latest()->take(3)->get();
 
         $deadlines = collect([
             [
@@ -76,29 +74,11 @@ class DashboardController extends Controller
                 'href' => route('ai-writing.index') . '?tab=typo',
             ],
             [
-                'title' => 'Cek Plagiarisme',
-                'description' => 'Bandingkan dengan paper terbaru',
-                'icon' => '🧬',
-                'accent' => 'from-amber-400/40 to-orange-500/10',
-                'href' => route('ai-writing.index') . '?tab=plagiarism',
-            ],
-        ];
-
-        $researchFocus = [
-            [
                 'title' => 'Research Gap',
-                'insight' => 'Literatur edtech Asia masih minim untuk konteks kampus hybrid.',
-                'next' => 'Cari studi 2022 ke atas untuk memperkuat novelty.',
-            ],
-            [
-                'title' => 'Dataset',
-                'insight' => '40 responden siap, butuh 25 lagi untuk validasi kuantitatif.',
-                'next' => 'Susun form survei lanjutan & reminder komunitas.',
-            ],
-            [
-                'title' => 'Advisor Feedback',
-                'insight' => 'Pembimbing minta contoh implementasi AI lokal.',
-                'next' => 'Siapkan studi kasus BEM & LMS kampus.',
+                'description' => 'Temukan celah penelitian baru',
+                'icon' => '🔍',
+                'accent' => 'from-amber-400/40 to-orange-500/10',
+                'href' => route('ai-writing.index') . '?tab=gap',
             ],
         ];
 
@@ -110,22 +90,22 @@ class DashboardController extends Controller
                 'trend' => '+6% minggu ini',
             ],
             [
-                'label' => 'Dokumen aktif',
-                'value' => $user->documents()->count(),
-                'suffix' => ' file',
-                'trend' => 'Termasuk catatan bimbingan',
-            ],
-            [
-                'label' => 'Pengecekan plagiarisme',
-                'value' => $user->plagiarismChecks()->count(),
-                'suffix' => ' kali',
-                'trend' => 'Rata-rata '.round($user->plagiarismChecks()->avg('similarity_score') ?? 0).'%',
+                'label' => 'Paper tersimpan',
+                'value' => $user->paperReferences()->count(),
+                'suffix' => ' paper',
+                'trend' => 'Referensi yang kamu kumpulkan',
             ],
             [
                 'label' => 'Sesi AI',
                 'value' => $user->aiInteractions()->count(),
                 'suffix' => ' percakapan',
                 'trend' => 'Terakhir '.optional($recentInteractions->first())->created_at?->diffForHumans(),
+            ],
+            [
+                'label' => 'Hari Tersisa',
+                'value' => now()->diffInDays($thesis->target_completion_date),
+                'suffix' => ' hari',
+                'trend' => 'Hingga target selesai',
             ],
         ];
 
@@ -134,9 +114,6 @@ class DashboardController extends Controller
             'deadlines' => $deadlines,
             'workspaceShortcuts' => $workspaceShortcuts,
             'recentInteractions' => $recentInteractions,
-            'documents' => $documents,
-            'plagiarismChecks' => $plagiarismChecks,
-            'researchFocus' => $researchFocus,
             'metrics' => $metrics,
         ]);
     }
