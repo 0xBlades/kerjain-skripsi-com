@@ -69,4 +69,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(PlagiarismCheck::class);
     }
+
+    public function paperReferences(): HasMany
+    {
+        return $this->hasMany(PaperReference::class);
+    }
 }
