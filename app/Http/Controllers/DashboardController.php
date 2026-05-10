@@ -103,7 +103,7 @@ class DashboardController extends Controller
             ],
             [
                 'label' => 'Hari Tersisa',
-                'value' => now()->diffInDays($thesis->target_completion_date),
+                'value' => round(now()->diffInDays($thesis->target_completion_date)),
                 'suffix' => ' hari',
                 'trend' => 'Hingga target selesai',
             ],
