@@ -42,14 +42,6 @@
                         <span class="hidden sm:inline">Koreksi Typo</span>
                         <span class="sm:hidden">Typo</span>
                     </button>
-                    <button onclick="switchTab('plagiarism')" id="tab-plagiarism"
-                        class="tab-btn inactive-tab flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all">
-                        <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span class="hidden sm:inline">Cek Plagiarisme</span>
-                        <span class="sm:hidden">Plagiarisme</span>
-                    </button>
                     <button onclick="switchTab('gap')" id="tab-gap"
                         class="tab-btn inactive-tab flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all">
                         <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -213,44 +205,6 @@
                     </div>
                 </div>
 
-                <!-- Plagiarism Check Tab -->
-                <div id="panel-plagiarism" class="tab-panel hidden p-6 space-y-6">
-                    <div class="grid lg:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Teks untuk Diperiksa</label>
-                            <textarea id="plagiarismInput" rows="12" class="block w-full rounded-2xl border border-slate-200/70 bg-white/90 focus:bg-white focus:border-sky-400 focus:ring-sky-400 transition" placeholder="Paste teks yang ingin dicek plagiarisme (minimal 100 karakter)..."></textarea>
-                            <div class="mt-4">
-                                <button onclick="checkPlagiarism()" class="inline-flex items-center gap-2 rounded-xl bg-sky-500 px-5 py-2 text-sm font-semibold text-white hover:bg-sky-600">
-                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    Cek Plagiarisme
-                                </button>
-                            </div>
-                        </div>
-                        <div id="plagiarismOutput" class="hidden space-y-4">
-                            <div class="feature-surface p-6">
-                                <div class="flex items-center justify-between mb-4">
-                                    <h3 class="font-semibold text-slate-900 dark:text-white">Hasil Analisis</h3>
-                                    <div id="similarityBadge" class="px-3 py-1 rounded-full text-sm font-semibold"></div>
-                                </div>
-                                <div class="space-y-4">
-                                    <div>
-                                        <div class="flex justify-between text-sm mb-1">
-                                            <span class="text-slate-600 dark:text-slate-300">Similarity Score</span>
-                                            <span id="similarityScore" class="font-semibold"></span>
-                                        </div>
-                                        <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
-                                            <div id="similarityBar" class="h-full rounded-full transition-all"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="plagiarismMatches" class="space-y-3"></div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Research Gap Tab -->
                 <div id="panel-gap" class="tab-panel hidden p-6 space-y-6">
                     <div class="space-y-4">
@@ -300,8 +254,6 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                                     @elseif($interaction->feature == 'typo_correction')
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    @elseif($interaction->feature == 'plagiarism_check')
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     @else
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                     @endif
@@ -492,58 +444,6 @@
                     document.getElementById('typoOutput').classList.remove('hidden');
                 } else {
                     alert(data.message || 'Gagal mengoreksi teks.');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('Terjadi kesalahan. Silakan coba lagi.');
-            }
-        }
-
-        // Plagiarism Check
-        async function checkPlagiarism() {
-            const text = document.getElementById('plagiarismInput').value;
-            if (!text || text.length < 100) {
-                alert('Masukkan teks minimal 100 karakter.');
-                return;
-            }
-            
-            try {
-                const response = await fetch('{{ route("ai-writing.check-plagiarism") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({ text })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    const score = data.data.similarity_score || 0;
-                    document.getElementById('similarityScore').textContent = score + '%';
-                    document.getElementById('similarityBar').style.width = score + '%';
-                    document.getElementById('similarityBar').className = `h-full rounded-full transition-all ${score < 15 ? 'bg-green-500' : score < 30 ? 'bg-yellow-500' : 'bg-red-500'}`;
-                    
-                    const badge = document.getElementById('similarityBadge');
-                    badge.textContent = score < 15 ? 'Aman' : score < 30 ? 'Perlu Perhatian' : 'Beresiko';
-                    badge.className = `px-3 py-1 rounded-full text-sm font-semibold ${score < 15 ? 'bg-green-100 text-green-600' : score < 30 ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'}`;
-                    
-                    const matches = document.getElementById('plagiarismMatches');
-                    matches.innerHTML = '<h4 class="font-medium text-slate-700 dark:text-slate-200">Temuan yang Perlu Diperhatikan</h4>';
-                    (data.data.matches || []).forEach(m => {
-                        matches.innerHTML += `
-                            <div class="feature-muted bg-slate-50 rounded-lg p-3 border border-slate-100">
-                                <p class="text-red-600 text-sm line-through">${m.text}</p>
-                                <p class="text-green-600 text-sm mt-1">${m.suggestion}</p>
-                                <span class="text-xs text-slate-400 dark:text-slate-500">${m.type}</span>
-                            </div>
-                        `;
-                    });
-                    
-                    document.getElementById('plagiarismOutput').classList.remove('hidden');
-                } else {
-                    alert(data.message || 'Gagal memeriksa plagiarisme.');
                 }
             } catch (error) {
                 console.error(error);

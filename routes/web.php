@@ -35,7 +35,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/ai-writing/generate', [AiWritingController::class, 'generate'])->name('ai-writing.generate');
     Route::post('/ai-writing/improve', [AiWritingController::class, 'improve'])->name('ai-writing.improve');
     Route::post('/ai-writing/correct-typo', [AiWritingController::class, 'correctTypo'])->name('ai-writing.correct-typo');
-    Route::post('/ai-writing/check-plagiarism', [AiWritingController::class, 'checkPlagiarism'])->name('ai-writing.check-plagiarism');
     Route::post('/ai-writing/find-gap', [AiWritingController::class, 'findGap'])->name('ai-writing.find-gap');
     Route::get('/ai-writing/history', [AiWritingController::class, 'history'])->name('ai-writing.history');
     

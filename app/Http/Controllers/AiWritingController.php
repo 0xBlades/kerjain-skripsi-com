@@ -238,76 +238,6 @@ class AiWritingController extends Controller
     }
 
     /**
-     * Check plagiarism (simulated with AI analysis)
-     */
-    public function checkPlagiarism(Request $request)
-    {
-        $request->validate([
-            'thesis_id' => 'nullable|exists:theses,id',
-            'text' => 'required|string|min:100|max:50000',
-            'document_id' => 'nullable|exists:documents,id',
-        ]);
-
-        $startTime = microtime(true);
-
-        try {
-            // In a real implementation, this would call a plagiarism detection service
-            // For now, we'll use AI to analyze potential similarities
-            $prompt = $this->buildPlagiarismCheckPrompt($request->text);
-            $aiResponse = $this->callSwiftrouterApi($prompt);
-            
-            $duration = (microtime(true) - $startTime) * 1000;
-            
-            // Parse plagiarism check results
-            $plagiarismData = $this->parsePlagiarismResults($aiResponse);
-
-            // Create plagiarism check record
-            $check = PlagiarismCheck::create([
-                'user_id' => Auth::id(),
-                'thesis_id' => $request->thesis_id,
-                'document_id' => $request->document_id,
-                'text_excerpt' => substr($request->text, 0, 1000),
-                'similarity_score' => $plagiarismData['similarity_score'] ?? 0,
-                'status' => 'completed',
-                'matches' => $plagiarismData['matches'] ?? [],
-            ]);
-
-            // Log AI interaction
-            AIInteraction::create([
-                'user_id' => Auth::id(),
-                'thesis_id' => $request->thesis_id,
-                'feature' => 'plagiarism_check',
-                'prompt' => substr($request->text, 0, 500),
-                'response' => json_encode($plagiarismData),
-                'metadata' => [
-                    'similarity_score' => $plagiarismData['similarity_score'] ?? 0,
-                    'document_id' => $request->document_id,
-                ],
-                'duration_ms' => round($duration, 2),
-                'status' => 'success',
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'check_id' => $check->id,
-                    'similarity_score' => $plagiarismData['similarity_score'] ?? 0,
-                    'status' => 'completed',
-                    'matches' => $plagiarismData['matches'] ?? [],
-                    'suggestions' => $plagiarismData['suggestions'] ?? [],
-                ],
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to check plagiarism.',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
-    }
-
-    /**
      * Find research gaps
      */
     public function findGap(Request $request)
@@ -459,35 +389,6 @@ Format output (JSON):
     }
   ],
   "summary": "ringkasan perubahan"
-}
-PROMPT;
-    }
-
-    private function buildPlagiarismCheckPrompt(string $text): string
-    {
-        return <<<PROMPT
-Analisis teks berikut untuk potensi plagiarisme. Identifikasi:
-1. Kalimat yang terlalu umum/mirip dengan sumber umum
-2. Bagian yang perlu dikutip/direferensikan
-3. Estimasi similarity score (0-100%)
-4. Rekomendasi parafrase untuk bagian bermasalah
-
-PENTING: JANGAN PERNAH gunakan karakter em-dash (—) dalam output. Gunakan strip biasa (-) jika diperlukan.
-
-Teks (potongan):
-{$text}
-
-Format output (JSON):
-{
-  "similarity_score": 15.5,
-  "matches": [
-    {
-      "text": "kalimat bermasalah",
-      "suggestion": "versi parafrase",
-      "type": "common_phrase/needs_citation/potential_copy"
-    }
-  ],
-  "suggestions": ["saran perbaikan umum"]
 }
 PROMPT;
     }
@@ -657,24 +558,6 @@ PROMPT;
             'corrected_text' => $aiResponse,
             'corrections' => [],
             'summary' => 'Koreksi berhasil diterapkan.',
-        ];
-    }
-
-    private function parsePlagiarismResults(string $aiResponse): array
-    {
-        try {
-            $data = json_decode($aiResponse, true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                return $data;
-            }
-        } catch (\Exception $e) {
-            // Fallback
-        }
-
-        return [
-            'similarity_score' => 0,
-            'matches' => [],
-            'suggestions' => ['Unable to parse results. Please try again.'],
         ];
     }
 
